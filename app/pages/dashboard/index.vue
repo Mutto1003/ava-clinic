@@ -76,7 +76,7 @@
 </script>
 
 <template>
-    <div class="dash- p-4 md:p-4 max-w-6xl mx-auto min-h-screen">
+    <div class="dash-page p-4 md:p-4 max-w-6xl mx-auto min-h-screen">
         <!-- ── Clinic Header & Search ── -->
         <DashboardClinicHeader v-model:searchQuery="searchQuery" />
 
@@ -88,7 +88,7 @@
                 :title="action.title"
                 :icon="action.icon"
                 :gradient="action.gradient"
-                @click="action.to ? navigateTo(action.to) : action.action ? action.action() : null"
+                @click="action.to ? navigateTo(action.to) : action.action?.()"
             />
         </div>
 

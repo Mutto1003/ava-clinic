@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { ref, computed } from 'vue'
-
     const props = defineProps<{
         selectedBranch: string
         selectedDoctor: string
@@ -106,17 +104,7 @@
         { day: 6, isCurrentMonth: false }
     ]
 
-    const getBranchPillColor = (branch: string) => {
-        if (branch === 'เลย') return 'bg-emerald-500 text-white'
-        if (branch === 'เมืองทองธานี') return 'bg-indigo-600 text-white'
-        return 'bg-rose-500 text-white'
-    }
-
-    const getBranchDotColor = (branch: string) => {
-        if (branch === 'เลย') return 'bg-emerald-500'
-        if (branch === 'เมืองทองธานี') return 'bg-indigo-500'
-        return 'bg-rose-500'
-    }
+    const { getBranchPillColor, getBranchDotColor } = useBranchColor()
 
     // Filter appointments inside each day
     const getFilteredAppointments = (day: number, isCurrent: boolean) => {

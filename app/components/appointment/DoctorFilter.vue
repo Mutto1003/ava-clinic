@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
-
     const props = defineProps<{
         selectedDoctor: string
     }>()
@@ -53,7 +51,7 @@
                     {{ doc.initial }}
                 </span>
                 
-                <span>{{ doc.name === 'ทั้งหมด' ? 'ทั้งหมด' : doc.name }}</span>
+                <span>{{ doc.name }}</span>
                 
                 <!-- Count suffix -->
                 <span 

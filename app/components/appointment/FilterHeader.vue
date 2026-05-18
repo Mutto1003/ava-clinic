@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
-
     const props = defineProps<{
         selectedBranch: string
         searchQuery: string
@@ -35,10 +33,8 @@
         emit('update:selectedBranch', branch)
     }
 
-    const updateSearch = (event: Event) => {
-        const value = (event.target as HTMLInputElement).value
-        emit('update:searchQuery', value)
-    }
+    const updateSearch = (event: Event) =>
+        emit('update:searchQuery', (event.target as HTMLInputElement).value)
 </script>
 
 <template>

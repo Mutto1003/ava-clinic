@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { ref, computed, watch } from 'vue'
-
     const props = defineProps<{
         selectedDay: number // e.g. 17
     }>()
@@ -61,15 +59,7 @@
         { id: 104, time: '15:30', customer: 'คุณสมหญิง', branch: 'เมืองทองธานี', colorClass: 'bg-[#6366f1]' }
     ])
 
-    const getBranchTextColor = (branch: string) => {
-        if (branch === 'เมืองทองธานี') return 'text-[#6366f1]'
-        return 'text-[#10b981]'
-    }
-
-    const getBranchDotColor = (branch: string) => {
-        if (branch === 'เมืองทองธานี') return 'bg-[#6366f1]'
-        return 'bg-[#10b981]'
-    }
+    const { getBranchTextColor, getBranchDotColor } = useBranchColor()
 
     const confirmBooking = () => {
         emit('save-booking', {
