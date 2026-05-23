@@ -1,5 +1,94 @@
 import type { ClientResp } from '../types'
 
+// ── Clinic Settings Types ──────────────────────────────────────────────────
+
+export type BrandColor = 'violet' | 'emerald' | 'blue' | 'pink' | 'amber' | 'custom'
+
+export type Branch = {
+    id: number
+    name: string
+    tag?: string
+    address: string
+    phone: string
+    staffCount: number
+    isHQ: boolean
+    isOpen: boolean
+}
+
+export type BusinessHourDay = {
+    day: string
+    dayShort: string
+    open: boolean
+    start: string
+    end: string
+}
+
+export type ClinicData = {
+    brand: {
+        logoUrl: string
+        nameEn: string
+        nameTh: string
+        legalName: string
+        businessType: string
+        primaryColor: BrandColor
+        customColor: string
+    }
+    license: {
+        taxId: string
+        taxBranch: string
+        vatType: string
+        licenseNumber: string
+        licenseIssuedDate: string
+        licenseExpiryDate: string
+    }
+    contact: {
+        callCenter: string
+        lineOfficial: string
+        email: string
+        website: string
+        facebook: string
+        instagram: string
+    }
+    branches: Branch[]
+    businessHours: BusinessHourDay[]
+    services: string[]
+}
+
+export async function getClinicSettings(token: string): Promise<ClientResp<ClinicData>> {
+    try {
+        const res = await fetch('/api/settings/clinic', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        const json = await res.json()
+        if (res.status !== 200) {
+            return { status: 'fails', code: res.status, message: json?.statusMessage ?? 'error' }
+        }
+        return { status: 'success', code: res.status, data: json.data }
+    } catch {
+        return { status: 'fails', code: 500, message: 'Internal Client Error' }
+    }
+}
+
+export async function updateClinicSettings(token: string, data: Partial<ClinicData>): Promise<ClientResp<ClinicData>> {
+    try {
+        const res = await fetch('/api/settings/clinic', {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        const json = await res.json()
+        if (res.status !== 200) {
+            return { status: 'fails', code: res.status, message: json?.statusMessage ?? 'error' }
+        }
+        return { status: 'success', code: res.status, data: json.data }
+    } catch {
+        return { status: 'fails', code: 500, message: 'Internal Client Error' }
+    }
+}
+
 export type TeamRole = 'หมอ' | 'พนักงาน' | 'Super Admin'
 
 export type MemberFormData = {
