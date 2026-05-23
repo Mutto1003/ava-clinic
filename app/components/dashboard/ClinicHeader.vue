@@ -20,7 +20,7 @@
 </script>
 
 <template>
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8 mt-10">
         <!-- ── Left Column: Welcome & Stats Card (Gradient) ── -->
         <div class="lg:col-span-3 gradient-card rounded-3xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-xl shadow-indigo-900/10 min-h-[220px]">
             <!-- Background lights -->
@@ -45,8 +45,8 @@
 
                 <!-- Schedule / Attention info -->
                 <p class="text-xs md:text-sm text-indigo-100/90 font-medium leading-relaxed">
-                    วันนี้คุณมีนัดหมาย <strong class="text-white font-black text-[13px] md:text-sm">8 ราย</strong> · 
-                    <strong class="text-white font-black text-[13px] md:text-sm">3 รายการ</strong> ต้องการความสนใจ · 
+                    วันนี้คุณมีนัดหมาย <strong class="text-white font-black text-[13px] md:text-sm">8 ราย</strong> ·
+                    <strong class="text-white font-black text-[13px] md:text-sm">3 รายการ</strong> ต้องการความสนใจ ·
                     <strong class="text-white font-black text-[13px] md:text-sm">5 สินค้า</strong> ใกล้หมดอายุ
                 </p>
             </div>

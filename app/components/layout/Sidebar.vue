@@ -17,7 +17,7 @@
     ]
 
     const systemItems = [
-        { name: 'ตั้งค่า', icon: 'i-lucide-settings', to: '#' },
+        { name: 'ตั้งค่า', icon: 'i-lucide-settings', to: '/settings' },
         { name: 'ค้นหา', icon: 'i-lucide-search', to: '#' }
     ]
 
@@ -67,6 +67,7 @@
                     :key="item.name"
                     :to="item.to"
                     class="menu-item"
+                    :class="{ 'menu-item--active': isActive(item.to) }"
                     data-testid="sidebar-system-link"
                 >
                     <UIcon :name="item.icon" class="menu-icon" />
