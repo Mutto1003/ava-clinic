@@ -1,11 +1,30 @@
 <script setup lang="ts">
+    import type { ReportData, ReportPeriod, ReportCompare } from '~/client/reports'
+
     definePageMeta({
         layout: 'main',
         middleware: ['auth']
     })
 
-    const { data, pending } = await useFetch('/api/reports')
-    const reportsData = computed(() => data.value?.data || null)
+    const period = ref<ReportPeriod>('daily')
+    const compare = ref<ReportCompare>('previous')
+
+    const query = computed(() => ({
+        period: period.value,
+        compare: compare.value
+    }))
+
+    const { data, pending, refresh } = await useFetch<{ status: string; data: ReportData }>(
+        '/api/reports',
+        { query }
+    )
+
+    const reportsData = computed(() => data.value?.data ?? null)
+
+    function onFilterChange(p: ReportPeriod, c: ReportCompare) {
+        period.value = p
+        compare.value = c
+    }
 </script>
 
 <template>
@@ -27,9 +46,21 @@
                 <ReportsHeader />
 
                 <div class="p-8 bg-[#fcfcfd] flex flex-col gap-6 flex-1">
-                    <ReportsFilter />
+                    <ReportsFilter
+                        :period="period"
+                        :compare="compare"
+                        :period-label="reportsData.period.label"
+                        :period-days="reportsData.period.days"
+                        @change="onFilterChange"
+                    />
+
                     <ReportsMetrics :metrics="reportsData.metrics" />
-                    <ReportsCharts />
+
+                    <ReportsCharts
+                        :daily-revenue="reportsData.dailyRevenue"
+                        :payment-methods="reportsData.paymentMethods"
+                        :period-label="reportsData.period.label"
+                    />
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <ReportsLeaderboard
@@ -46,7 +77,10 @@
                         />
                     </div>
 
-                    <ReportsRecentBills :bills="reportsData.recentBills" />
+                    <ReportsRecentBills
+                        :bills="reportsData.recentBills"
+                        :total="reportsData.totalBills"
+                    />
                 </div>
             </div>
         </div>

@@ -168,22 +168,41 @@ export const mockReportMetrics = {
     revenue: {
         value: 1247500,
         trend: '+18.4%',
-        avg: 89107
+        avg: 89107,
+        prevAvg: 75270
     },
     bills: {
         value: 412,
         trend: '+12%',
-        diff: 368
+        prevValue: 368,
+        diff: 44
     },
     avgPerBill: {
         value: 3027,
-        trend: '+5.8%'
+        trend: '+5.8%',
+        prevValue: 2862
     },
     newCustomers: {
         value: 86,
-        trend: '-3.2%'
+        trend: '-3.2%',
+        prevValue: 89,
+        diff: -3
     }
 }
+
+export const mockDailyRevenue = {
+    current: [45200, 62300, 38500, 71000, 89400, 55600, 92100, 68000, 103000, 75000, 58900, 128400, 82000, 95100],
+    previous: [38000, 52000, 31000, 60000, 75000, 48000, 78000, 59000, 88000, 62000, 48000, 95000, 70000, 82000],
+    target: 100000,
+    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
+}
+
+export const mockPaymentMethods = [
+    { name: 'บัตรเครดิต', amount: 748000, percent: 60, hex: '#4f46e5' },
+    { name: 'QR Transfer', amount: 337000, percent: 27, hex: '#10b981' },
+    { name: 'เงินสด', amount: 124000, percent: 10, hex: '#f59e0b' },
+    { name: 'อื่น ๆ (LINE Pay, พร้อม)', amount: 37000, percent: 3, hex: '#d1d5db' }
+]
 
 export const mockTopServices = [
     { id: 1, name: 'Filler Juvederm', revenue: 342000, bills: 42, avg: 8143, progress: 85 },
@@ -243,6 +262,8 @@ export const mockRecentBills = [
         initial: 'SR',
         color: 'bg-rose-100 text-rose-600',
         service: 'Filler Juvederm',
+        serviceCount: 1,
+        serviceUnit: 'ครั้ง',
         amount: 28000,
         payment: 'บัตรเครดิต',
         paymentColor: 'bg-purple-100 text-purple-700',
@@ -253,7 +274,9 @@ export const mockRecentBills = [
         customer: 'นภาพร แสงมณี',
         initial: 'NP',
         color: 'bg-blue-100 text-blue-600',
-        service: 'Laser, Botox 50u',
+        service: 'Laser + Botox 50u',
+        serviceCount: 2,
+        serviceUnit: 'อย่าง',
         amount: 12500,
         payment: 'QR Transfer',
         paymentColor: 'bg-emerald-100 text-emerald-700',
@@ -265,6 +288,8 @@ export const mockRecentBills = [
         initial: 'TD',
         color: 'bg-emerald-100 text-emerald-600',
         service: 'Acne Course',
+        serviceCount: 6,
+        serviceUnit: 'ครั้ง',
         amount: 5500,
         payment: 'QR Transfer',
         paymentColor: 'bg-emerald-100 text-emerald-700',
@@ -276,6 +301,8 @@ export const mockRecentBills = [
         initial: 'WS',
         color: 'bg-amber-100 text-amber-600',
         service: 'Vitamin Drip',
+        serviceCount: 1,
+        serviceUnit: 'ครั้ง',
         amount: 3200,
         payment: 'เงินสด',
         paymentColor: 'bg-amber-100 text-amber-700',
@@ -287,6 +314,8 @@ export const mockRecentBills = [
         initial: 'KK',
         color: 'bg-purple-100 text-purple-600',
         service: 'Facial Treatment',
+        serviceCount: 1,
+        serviceUnit: 'ครั้ง',
         amount: 1500,
         payment: 'บัตรเครดิต',
         paymentColor: 'bg-purple-100 text-purple-700',
