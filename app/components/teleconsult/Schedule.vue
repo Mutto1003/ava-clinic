@@ -1,11 +1,29 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
+    type Status = 'LIVE' | 'UPCOMING' | 'WAITING' | 'COMPLETED'
 
-    defineProps<{
-        schedule: any[]
+    interface ScheduleItem {
+        id: number
+        time: string
+        duration: string
+        patient: string
+        initial: string
+        type: string
+        hn?: string
+        status: Status
+        isVip?: boolean
+    }
+
+    const props = defineProps<{
+        schedule: ScheduleItem[]
     }>()
 
-    const filter = ref('ทั้งหมด')
+    const filter = ref<'ทั้งหมด' | 'รอ' | 'เสร็จแล้ว'>('ทั้งหมด')
+
+    const filteredSchedule = computed(() => {
+        if (filter.value === 'รอ') return props.schedule.filter(i => i.status === 'WAITING' || i.status === 'UPCOMING')
+        if (filter.value === 'เสร็จแล้ว') return props.schedule.filter(i => i.status === 'COMPLETED')
+        return props.schedule
+    })
 </script>
 
 <template>
@@ -35,7 +53,7 @@
 
         <div class="space-y-4 flex-1">
             <div
-                v-for="item in schedule"
+                v-for="item in filteredSchedule"
                 :key="item.id"
                 class="flex items-center justify-between p-4 rounded-2xl transition-all"
                 :class="

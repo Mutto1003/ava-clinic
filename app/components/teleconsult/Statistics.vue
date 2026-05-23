@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
-
     const filter = ref('7 วัน')
 
     // Mock data for the chart

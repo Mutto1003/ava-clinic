@@ -1,11 +1,21 @@
 <script setup lang="ts">
+    interface Summary {
+        activeSessions: number
+        totalSessions: number
+        activeRooms: string
+        waitingCount: number
+        nextPatientIn: string
+        completedToday: number
+        completedTrend: string
+        revenueToday: number
+        revenueAvg: number
+    }
+
     defineProps<{
-        summary: any
+        summary: Summary
     }>()
 
-    const formatNumber = (num: number) => {
-        return new Intl.NumberFormat('th-TH').format(num)
-    }
+    const formatNumber = (num: number) => new Intl.NumberFormat('th-TH').format(num)
 </script>
 
 <template>

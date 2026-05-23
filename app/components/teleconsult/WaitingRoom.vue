@@ -1,8 +1,15 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
+    interface WaitingRoomItem {
+        id: number
+        patient: string
+        initial: string
+        status: string
+        color?: string
+        action?: string
+    }
 
     defineProps<{
-        waitingRoom: any[]
+        waitingRoom: WaitingRoomItem[]
     }>()
 
     const toast = useAppToast()
