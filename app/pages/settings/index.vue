@@ -78,32 +78,6 @@
         toast.info('Export รายชื่อ', 'กำลังสร้างไฟล์ CSV รายชื่อสมาชิก...', { icon: 'i-lucide-download' })
     }
 
-    const designCards = [
-        {
-            num: '01',
-            title: 'ภาพรวมทีม',
-            desc: 'เห็นจำนวนสมาชิกแต่ละ role และที่นั่ง license ที่เหลือในแต่ละแผนก',
-            bullets: ['หมอ / พนักงาน / Super Admin แยกการ์ด', 'เตือนเมื่อใกล้เต็ม license', 'จำนวนคนกำลังออนไลน์']
-        },
-        {
-            num: '02',
-            title: 'เพิ่มสมาชิกใหม่',
-            desc: 'ฟอร์มเดียวตั้งแต่ข้อมูลตัวตน > role > สาขา > ตารางทำงาน > 2FA',
-            bullets: ['3 การ์ดเลือก role พร้อมคำอธิบาย', 'เลือกได้หลายสาขา (chip multi-select)', 'Toggle 2FA และ IP whitelist']
-        },
-        {
-            num: '03',
-            title: 'ปรับสิทธิ์รายคน',
-            desc: 'Matrix แสดงสิ่งที่สมาชิกคนนี้ทำได้แต่ละโมดูล เริ่มจาก template ของ role แล้วปรับเฉพาะตามต้องการ',
-            bullets: ['ดู / แก้ไข / ลบ และ ส่งออก', 'เห็น scope ชัด เฉพาะเคสตัวเอง', 'ไม่กระทบ role template']
-        },
-        {
-            num: '04-05',
-            title: 'จัดการทีม และ คำเชิญ',
-            desc: 'ตารางสมาชิกทุกคน + คิวคำเชิญรอตอบรับ ดูว่าใครออนไลน์ใครกำลังส่งรูป',
-            bullets: ['กรองด้วย role / สาขา', 'ปุ่มส่งซ้ำเมื่อคำเชิญใกล้หมดอายุ', 'Audit log ทุกการเปลี่ยนแปลง']
-        }
-    ]
 </script>
 
 <template>
@@ -225,36 +199,6 @@
                         <!-- Section 05: Pending Invitations -->
                         <Invitations :invitations="settingsData.data.invitations" />
 
-                        <!-- Design Summary Cards -->
-                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                            <div class="mb-5">
-                                <h2 class="font-black text-gray-900 text-lg">สรุป Design — ทำอะไรในแต่ละส่วน</h2>
-                                <p class="text-xs text-gray-400 font-medium mt-1">หน้านี้ตอบโจทย์ "ควบคุมทีมที่ส่งรูปเข้าระบบ" โดยแยกความรับผิดชอบให้ชัดเจน 4 ขั้น</p>
-                            </div>
-                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                <div
-                                    v-for="card in designCards"
-                                    :key="card.num"
-                                    class="bg-slate-50 rounded-xl p-4"
-                                >
-                                    <div class="flex items-center gap-2 mb-3">
-                                        <span class="w-6 h-6 rounded-md bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-black">{{ card.num }}</span>
-                                        <span class="font-black text-gray-800 text-sm">{{ card.title }}</span>
-                                    </div>
-                                    <p class="text-[11px] text-gray-500 font-medium leading-relaxed mb-3">{{ card.desc }}</p>
-                                    <ul class="space-y-1">
-                                        <li
-                                            v-for="bullet in card.bullets"
-                                            :key="bullet"
-                                            class="text-[10px] text-gray-500 font-medium flex items-start gap-1.5"
-                                        >
-                                            <span class="text-emerald-500 mt-0.5 shrink-0">·</span>
-                                            {{ bullet }}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Other tabs: placeholder -->
@@ -266,7 +210,7 @@
                 </div>
 
                 <!-- Right column: Sticky preview panel -->
-                <div class="w-72 shrink-0 sticky top-6 max-h-[calc(100vh-80px)] overflow-y-auto pb-6 scrollbar-hide">
+                <div class="w-72 shrink-0 sticky top-6 pb-6">
                     <InvitePreview
                         :form="form"
                         :recent-activity="settingsData.data.recentActivity"

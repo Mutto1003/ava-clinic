@@ -79,6 +79,27 @@
     ]
 
     const toast = useAppToast()
+
+    const toggleItems = computed(() => [
+        {
+            key: 'sendInviteEmail' as keyof MemberFormData,
+            label: 'ส่งอีเมลคำเชิญทันทีเมื่อบันทึก',
+            desc: `ส่งลิงก์ตั้งรหัสผ่านไปที่ ${form.value.email || 'อีเมลที่ระบุ'} · หมดอายุใน 7 วัน`,
+            icon: 'i-lucide-mail'
+        },
+        {
+            key: 'require2FA' as keyof MemberFormData,
+            label: 'บังคับใช้ 2-Factor Authentication',
+            desc: 'สมาชิกต้องตั้ง 2FA ก่อนเข้าใช้งานครั้งแรก · แนะนำสำหรับ Super Admin และหมอ',
+            icon: 'i-lucide-shield-check'
+        },
+        {
+            key: 'allowExternalIP' as keyof MemberFormData,
+            label: 'อนุญาตให้เข้าใช้งานนอก IP คลินิก',
+            desc: 'ปิดไว้เพื่อความปลอดภัย · เปิดเฉพาะกรณีหมอต้อง Teleconsult จากนอกสถานที่',
+            icon: 'i-lucide-wifi'
+        }
+    ])
 </script>
 
 <template>
@@ -333,29 +354,41 @@
             </div>
 
             <!-- Security toggles -->
-            <div class="space-y-4 pt-2">
+            <div class="space-y-2 pt-2">
                 <div
-                    v-for="toggle in [
-                        { key: 'sendInviteEmail', label: 'ส่งอีเมลคำเชิญทันทีเมื่อบันทึก', desc: `ระบบจะส่งลิงก์ตั้งรหัสผ่านไปที่ ${form.email || 'อีเมลที่ระบุ'} · ลิงก์หมดอายุใน 7 วัน` },
-                        { key: 'require2FA', label: 'บังคับใช้ 2-Factor Authentication', desc: 'สมาชิกต้องตั้ง 2FA ก่อนเข้าใช้งานครั้งแรก · แนะนำสำหรับ Super Admin และหมอ' },
-                        { key: 'allowExternalIP', label: 'อนุญาตให้เข้าใช้งานนอก IP คลินิก', desc: 'ปิดไว้เพื่อความปลอดภัย · เปิดเฉพาะกรณีหมอต้อง Teleconsult จากนอกสถานที่' }
-                    ] as Array<{ key: keyof MemberFormData; label: string; desc: string }>"
+                    v-for="toggle in toggleItems"
                     :key="toggle.key"
-                    class="flex items-center justify-between gap-4"
+                    class="flex items-center justify-between gap-4 px-4 py-3.5 rounded-xl border transition-all duration-150 cursor-pointer"
+                    :class="form[toggle.key]
+                        ? 'border-indigo-100 bg-indigo-50/50'
+                        : 'border-gray-100 bg-gray-50/40 hover:bg-gray-50'"
+                    @click="update(toggle.key, !form[toggle.key])"
                 >
-                    <div>
-                        <p class="text-sm font-bold text-gray-800">{{ toggle.label }}</p>
-                        <p class="text-[11px] text-gray-400 font-medium mt-0.5">{{ toggle.desc }}</p>
+                    <div class="flex items-start gap-3 min-w-0">
+                        <div
+                            class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                            :class="form[toggle.key] ? 'bg-indigo-100' : 'bg-white border border-gray-100'"
+                        >
+                            <UIcon
+                                :name="toggle.icon"
+                                class="w-4 h-4 transition-colors"
+                                :class="form[toggle.key] ? 'text-indigo-600' : 'text-gray-400'"
+                            />
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold text-gray-800">{{ toggle.label }}</p>
+                            <p class="text-[11px] text-gray-400 font-medium mt-0.5 leading-relaxed">{{ toggle.desc }}</p>
+                        </div>
                     </div>
                     <button
                         type="button"
-                        class="relative w-11 h-6 rounded-full transition-colors cursor-pointer shrink-0"
-                        :class="form[toggle.key] ? 'bg-indigo-600' : 'bg-gray-200'"
-                        @click="update(toggle.key, !form[toggle.key])"
+                        class="relative w-12 h-6 rounded-full transition-all duration-200 cursor-pointer shrink-0 focus:outline-none"
+                        :class="form[toggle.key] ? 'bg-indigo-600 shadow-sm shadow-indigo-200' : 'bg-gray-200'"
+                        @click.stop="update(toggle.key, !form[toggle.key])"
                     >
                         <span
-                            class="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform"
-                            :class="form[toggle.key] ? 'translate-x-5' : 'translate-x-0.5'"
+                            class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200"
+                            :class="form[toggle.key] ? 'translate-x-6' : 'translate-x-0'"
                         ></span>
                     </button>
                 </div>
