@@ -4,4 +4,4 @@
 
 - nmp run typecheck
 - npm run format
-- test
+
