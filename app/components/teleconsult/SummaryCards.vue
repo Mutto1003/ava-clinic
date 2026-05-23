@@ -25,9 +25,7 @@
 
             <div class="flex items-baseline gap-2 mb-4 relative z-10">
                 <span class="text-4xl font-black">{{ summary.activeSessions }}</span>
-                <span class="text-sm text-indigo-100 font-medium"
-                    >/ {{ summary.totalSessions }} เซสชันวันนี้</span
-                >
+                <span class="text-sm text-indigo-100 font-medium">/ {{ summary.totalSessions }} เซสชันวันนี้</span>
             </div>
 
             <div class="flex items-center gap-3 relative z-10">
@@ -40,7 +38,7 @@
                     <div
                         class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-[10px] font-bold ring-2 ring-indigo-500"
                     >
-                        WS
+                        วช
                     </div>
                 </div>
                 <div class="text-[11px] font-medium text-indigo-100">{{ summary.activeRooms }}</div>
@@ -48,63 +46,59 @@
         </div>
 
         <!-- Waiting Room -->
-        <div
-            class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between"
-        >
+        <div class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-gray-500">รอเข้าห้อง</span>
-                <div
-                    class="w-6 h-6 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center"
-                >
+                <div class="w-6 h-6 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center">
                     <UIcon name="i-heroicons-clock" class="w-3.5 h-3.5" />
                 </div>
             </div>
             <div>
                 <div class="text-3xl font-black text-gray-900 mb-1">{{ summary.waitingCount }}</div>
-                <div class="text-[11px] font-medium text-gray-400">{{ summary.nextPatientIn }}</div>
+                <div class="text-[11px] font-medium text-gray-400 flex items-center gap-1.5">
+                    {{ summary.nextPatientIn }}
+                    <span
+                        v-if="summary.waitingNewCount"
+                        class="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md"
+                    >
+                        +{{ summary.waitingNewCount }}
+                    </span>
+                </div>
             </div>
         </div>
 
         <!-- Completed -->
-        <div
-            class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between"
-        >
+        <div class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-gray-500">เสร็จแล้ววันนี้</span>
-                <div
-                    class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center"
-                >
+                <div class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
                     <UIcon name="i-heroicons-check" class="w-3.5 h-3.5" />
                 </div>
             </div>
             <div>
-                <div class="text-3xl font-black text-gray-900 mb-1">
-                    {{ summary.completedToday }}
-                </div>
-                <div class="text-[11px] font-bold text-emerald-500">
-                    {{ summary.completedTrend }}
+                <div class="text-3xl font-black text-gray-900 mb-1">{{ summary.completedToday }}</div>
+                <div class="text-[11px] font-medium text-gray-400 flex items-center gap-1.5">
+                    <span class="font-bold text-emerald-500">{{ summary.completedTrend }}</span>
+                    <span class="text-gray-300">·</span>
+                    <span>เป้า {{ summary.completedGoal }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Revenue -->
-        <div
-            class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between"
-        >
+        <div class="bg-white rounded-2xl p-5 ring-1 ring-gray-100 shadow-sm flex flex-col justify-between">
             <div class="flex justify-between items-start mb-2">
                 <span class="text-xs font-bold text-gray-500">รายได้รวมวันนี้</span>
-                <div
-                    class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center"
-                >
+                <div class="w-6 h-6 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center">
                     <UIcon name="i-heroicons-currency-dollar" class="w-3.5 h-3.5" />
                 </div>
             </div>
             <div>
-                <div class="text-3xl font-black text-gray-900 mb-1">
-                    ฿{{ formatNumber(summary.revenueToday) }}
-                </div>
-                <div class="text-[11px] font-medium text-gray-400">
-                    เฉลี่ย ฿{{ formatNumber(summary.revenueAvg) }}/เซสชัน
+                <div class="text-3xl font-black text-gray-900 mb-1">฿{{ formatNumber(summary.revenueToday) }}</div>
+                <div class="text-[11px] font-medium text-gray-400 flex items-center gap-1.5">
+                    <span>เฉลี่ย ฿{{ formatNumber(summary.revenueAvg) }}/เซสชัน</span>
+                    <span class="text-gray-300">·</span>
+                    <span class="font-bold text-indigo-500">{{ summary.revenuePercent }}% ของเป้า</span>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@
         { name: 'เพิ่มลูกค้าใหม่', icon: 'i-lucide-user-plus', to: '/customerNew' },
         { name: 'ข้อมูลลูกค้า', icon: 'i-lucide-users', to: '/customerInfo' },
         { name: 'ปฏิทินนัดหมาย', icon: 'i-lucide-calendar', to: '/appointment' },
-        { name: 'คลังสินค้า', icon: 'i-lucide-package', to: '#' },
+        { name: 'คลังสินค้า', icon: 'i-lucide-package', to: '/inventory' },
         { name: 'รายงาน', icon: 'i-lucide-bar-chart-2', to: '/reports' },
         { name: 'จุดบริการ', icon: 'i-lucide-activity', to: '#' },
         { name: 'Teleconsult', icon: 'i-lucide-video', to: '/teleconsult', badge: 'BETA' }

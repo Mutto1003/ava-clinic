@@ -10,6 +10,14 @@ export type TeleconsultSummary = {
     completedTrend: string
     revenueToday: number
     revenueAvg: number
+    pingMs: number
+    totalWaiting: number
+    activeLiveCount: number
+    targetRevenue: number
+    completedGoal: number
+    revenuePercent: number
+    waitingNewCount: number
+    waitingAvgMin: number
 }
 
 export type TeleconsultScheduleItem = {
@@ -22,6 +30,7 @@ export type TeleconsultScheduleItem = {
     hn?: string
     status: string
     isVip?: boolean
+    isNew?: boolean
 }
 
 export type TeleconsultWaitingRoomItem = {
@@ -37,10 +46,34 @@ export type TeleconsultDoctor = {
     id: number
     name: string
     initial: string
+    specialty: string
     status: string
     statusColor: string
     avatarClass?: string
     cases: number
+}
+
+export type TeleconsultLiveConsult = {
+    patientName: string
+    condition: string
+    room: string
+    doctor: string
+    duration: string
+}
+
+export type TeleconsultChartItem = {
+    label: string
+    completed: number
+    cancelled: number
+    isToday?: boolean
+}
+
+export type TeleconsultStatistics = {
+    totalCount: number
+    trendPercent: string
+    avgPerDay: string
+    peakDay: string
+    chart: TeleconsultChartItem[]
 }
 
 export type TeleconsultData = {
@@ -48,6 +81,8 @@ export type TeleconsultData = {
     schedule: TeleconsultScheduleItem[]
     waitingRoom: TeleconsultWaitingRoomItem[]
     doctors: TeleconsultDoctor[]
+    liveConsult: TeleconsultLiveConsult
+    statistics: TeleconsultStatistics
 }
 
 export async function getTeleconsult(token: string): Promise<ClientResp<TeleconsultData>> {

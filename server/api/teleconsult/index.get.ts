@@ -2,12 +2,13 @@ import {
     mockTeleconsultSummary,
     mockTeleconsultSchedule,
     mockTeleconsultWaitingRoom,
-    mockTeleconsultDoctors
+    mockTeleconsultDoctors,
+    mockTeleconsultLiveConsult,
+    mockTeleconsultStatistics
 } from '../../utils/db'
 import { simulateDelay } from '../../utils/delay'
 
-export default defineEventHandler(async event => {
-    // Simulate network delay
+export default defineEventHandler(async () => {
     await simulateDelay(400)
 
     return {
@@ -16,7 +17,9 @@ export default defineEventHandler(async event => {
             summary: mockTeleconsultSummary,
             schedule: mockTeleconsultSchedule,
             waitingRoom: mockTeleconsultWaitingRoom,
-            doctors: mockTeleconsultDoctors
+            doctors: mockTeleconsultDoctors,
+            liveConsult: mockTeleconsultLiveConsult,
+            statistics: mockTeleconsultStatistics
         }
     }
 })

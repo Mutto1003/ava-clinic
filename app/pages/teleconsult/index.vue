@@ -30,27 +30,27 @@
             </div>
 
             <div v-if="teleconsultData?.data" class="space-y-6">
-                <!-- Header Component -->
-                <Header />
+                <Header :summary="teleconsultData.data.summary" />
 
-                <!-- Summary 4 Cards Component -->
                 <SummaryCards :summary="teleconsultData.data.summary" />
 
-                <!-- Main Dashboard Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <!-- Left Column (Schedule & Stats) -->
                     <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-6">
                         <Schedule :schedule="teleconsultData.data.schedule" class="flex-1" />
-                        <div class="h-72 shrink-0">
-                            <Statistics />
+                        <div class="h-80 shrink-0">
+                            <Statistics :statistics="teleconsultData.data.statistics" />
                         </div>
                     </div>
 
-                    <!-- Right Column (Wait Room, Shortcuts, Doctors) -->
-                    <div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-6">
-                        <WaitingRoom :waitingRoom="teleconsultData.data.waitingRoom" />
-                        <Shortcuts />
+                    <!-- Right Column (Wait Room, Doctors, Shortcuts) -->
+                    <div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-4">
+                        <WaitingRoom
+                            :waitingRoom="teleconsultData.data.waitingRoom"
+                            :liveConsult="teleconsultData.data.liveConsult"
+                        />
                         <Doctors :doctors="teleconsultData.data.doctors" />
+                        <Shortcuts />
                     </div>
                 </div>
             </div>
