@@ -1,16 +1,8 @@
 <script setup lang="ts">
-    interface Doctor {
-        id: number
-        name: string
-        initial: string
-        status: string
-        statusColor: string
-        avatarClass?: string
-        cases: number
-    }
+    import type { TeleconsultDoctor } from '~/client/teleconsult'
 
     defineProps<{
-        doctors: Doctor[]
+        doctors: TeleconsultDoctor[]
     }>()
 
     const avatarColors: Record<number, string> = {
@@ -19,7 +11,7 @@
         3: 'bg-emerald-100 text-emerald-600',
     }
 
-    const getAvatarClass = (doctor: Doctor) =>
+    const getAvatarClass = (doctor: TeleconsultDoctor) =>
         doctor.avatarClass ?? avatarColors[doctor.id] ?? 'bg-purple-100 text-purple-600'
 </script>
 

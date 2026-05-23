@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import type { CalendarAppointment, CalendarDay } from '~/client/appointment'
+
     const props = defineProps<{
         selectedBranch: string
         selectedDoctor: string
@@ -11,7 +13,7 @@
     }>()
 
     // Fully comprehensive Mock Appointments database for May 2569 (3 สาขา: เลย, เมืองทองธานี, อมตะชลบุรี)
-    const appointments = ref([
+    const appointments = ref<CalendarAppointment[]>([
         { id: 1, day: 4, time: '10:38', name: 'คุณวิไลพร', branch: 'เมืองทองธานี', doctor: 'Dr. พิมลภา จันทร์เพ็ญ' },
         { id: 2, day: 4, time: '14:00', name: 'คุณธนภูมิ', branch: 'อมตะชลบุรี', doctor: 'Dr. ธนดล สวัสดี' },
 
@@ -54,7 +56,7 @@
 
     // Define 6 weeks grid layout for May 2569
     // Starts Friday 1st May 2569, meaning Apr 26 - 30 are blank/faint from previous month
-    const calendarDays = [
+    const calendarDays: CalendarDay[] = [
         { day: 26, isCurrentMonth: false },
         { day: 27, isCurrentMonth: false },
         { day: 28, isCurrentMonth: false },
@@ -125,7 +127,7 @@
         })
     }
 
-    const onDayClick = (day: { day: number, isCurrentMonth: boolean }) => {
+    const onDayClick = (day: CalendarDay) => {
         if (day.isCurrentMonth) {
             emit('select-day', day.day)
         }

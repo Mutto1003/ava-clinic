@@ -1,20 +1,8 @@
 <script setup lang="ts">
-    type Status = 'LIVE' | 'UPCOMING' | 'WAITING' | 'COMPLETED'
-
-    interface ScheduleItem {
-        id: number
-        time: string
-        duration: string
-        patient: string
-        initial: string
-        type: string
-        hn?: string
-        status: Status
-        isVip?: boolean
-    }
+    import type { TeleconsultScheduleItem } from '~/client/teleconsult'
 
     const props = defineProps<{
-        schedule: ScheduleItem[]
+        schedule: TeleconsultScheduleItem[]
     }>()
 
     const filter = ref<'ทั้งหมด' | 'รอ' | 'เสร็จแล้ว'>('ทั้งหมด')

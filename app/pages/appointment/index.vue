@@ -1,4 +1,9 @@
 <script setup lang="ts">
+    import FilterHeader from '~/components/appointment/FilterHeader.vue'
+    import DoctorFilter from '~/components/appointment/DoctorFilter.vue'
+    import CalendarGrid from '~/components/appointment/CalendarGrid.vue'
+    import SidebarPanel from '~/components/appointment/SidebarPanel.vue'
+
     definePageMeta({
         layout: 'main',
         middleware: ['auth']

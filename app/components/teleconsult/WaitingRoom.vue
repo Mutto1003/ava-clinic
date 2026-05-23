@@ -1,15 +1,8 @@
 <script setup lang="ts">
-    interface WaitingRoomItem {
-        id: number
-        patient: string
-        initial: string
-        status: string
-        color?: string
-        action?: string
-    }
+    import type { TeleconsultWaitingRoomItem } from '~/client/teleconsult'
 
     defineProps<{
-        waitingRoom: WaitingRoomItem[]
+        waitingRoom: TeleconsultWaitingRoomItem[]
     }>()
 
     const toast = useAppToast()

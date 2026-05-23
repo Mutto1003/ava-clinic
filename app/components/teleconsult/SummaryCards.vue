@@ -1,18 +1,8 @@
 <script setup lang="ts">
-    interface Summary {
-        activeSessions: number
-        totalSessions: number
-        activeRooms: string
-        waitingCount: number
-        nextPatientIn: string
-        completedToday: number
-        completedTrend: string
-        revenueToday: number
-        revenueAvg: number
-    }
+    import type { TeleconsultSummary } from '~/client/teleconsult'
 
     defineProps<{
-        summary: Summary
+        summary: TeleconsultSummary
     }>()
 
     const formatNumber = (num: number) => new Intl.NumberFormat('th-TH').format(num)

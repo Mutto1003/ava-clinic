@@ -1,14 +1,16 @@
 <script setup lang="ts">
+    import type { SidebarDoctor, DayAppointment, BookingPayload } from '~/client/appointment'
+
     const props = defineProps<{
         selectedDay: number // e.g. 17
     }>()
 
     const emit = defineEmits<{
-        (e: 'save-booking', payload: any): void
+        (e: 'save-booking', payload: BookingPayload): void
     }>()
 
     // 3 Mockup Doctors aligned with active database branches: เมืองทองธานี, เลย
-    const doctors = ref([
+    const doctors = ref<SidebarDoctor[]>([
         { id: 1, name: 'พิมลภา จันทร์เพ็ญ', branch: 'เมืองทองธานี', specialty: 'ความงาม', time: '10:00-19:00', initial: 'พม', color: 'bg-[#ec4899] text-white' },
         { id: 2, name: 'ธนดล สวัสดี', branch: 'เมืองทองธานี', specialty: 'ผิวหนัง', time: '13:00-20:00', initial: 'ธด', color: 'bg-[#3b82f6] text-white' },
         { id: 3, name: 'นันทกานต์ ภู่กัน', branch: 'เลย', specialty: 'จิตเวช', time: '10:00-18:00', initial: 'นก', color: 'bg-[#10b981] text-white' }
@@ -52,7 +54,7 @@
     }
 
     // Existing Appointments for Day 17 (Matches Mockup Image 2 exactly, aligned with database branches)
-    const dayAppointments = ref([
+    const dayAppointments = ref<DayAppointment[]>([
         { id: 101, time: '09:30', customer: 'คุณรุ่งทอง', branch: 'เมืองทองธานี', colorClass: 'bg-[#6366f1]' },
         { id: 102, time: '11:00', customer: 'คุณภัทรา', branch: 'เมืองทองธานี', colorClass: 'bg-[#6366f1]' },
         { id: 103, time: '14:00', customer: 'คุณวารี', branch: 'เลย', colorClass: 'bg-[#10b981]' },

@@ -1,10 +1,19 @@
 <script setup lang="ts">
+    import Header from '~/components/teleconsult/Header.vue'
+    import SummaryCards from '~/components/teleconsult/SummaryCards.vue'
+    import Schedule from '~/components/teleconsult/Schedule.vue'
+    import Statistics from '~/components/teleconsult/Statistics.vue'
+    import WaitingRoom from '~/components/teleconsult/WaitingRoom.vue'
+    import Shortcuts from '~/components/teleconsult/Shortcuts.vue'
+    import Doctors from '~/components/teleconsult/Doctors.vue'
+    import type { TeleconsultData } from '~/client/teleconsult'
+
     definePageMeta({
         layout: 'main',
         middleware: ['auth']
     })
 
-    const { data: teleconsultData, pending } = useFetch('/api/teleconsult')
+    const { data: teleconsultData, pending } = useFetch<{ status: string; data: TeleconsultData }>('/api/teleconsult')
 </script>
 
 <template>
