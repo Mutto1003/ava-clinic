@@ -54,25 +54,46 @@
                     >
                         <td class="px-6 py-3.5">
                             <div class="flex items-center gap-2">
-                                <UIcon :name="row.icon" class="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                                <UIcon
+                                    :name="row.icon"
+                                    class="w-3.5 h-3.5 text-gray-400 shrink-0"
+                                />
                                 <span class="font-bold text-gray-700 text-xs">{{ row.module }}</span>
                             </div>
                         </td>
                         <td class="px-4 py-3.5">
-                            <span class="flex items-center gap-1.5 text-xs font-bold" :class="colorMap[row.viewColor]">
-                                <span class="w-1.5 h-1.5 rounded-full shrink-0" :class="dotMap[row.viewColor]"></span>
+                            <span
+                                class="flex items-center gap-1.5 text-xs font-bold"
+                                :class="colorMap[row.viewColor]"
+                            >
+                                <span
+                                    class="w-1.5 h-1.5 rounded-full shrink-0"
+                                    :class="dotMap[row.viewColor]"
+                                />
                                 {{ row.view }}
                             </span>
                         </td>
                         <td class="px-4 py-3.5">
-                            <span class="flex items-center gap-1.5 text-xs font-bold" :class="colorMap[row.editColor]">
-                                <span class="w-1.5 h-1.5 rounded-full shrink-0" :class="dotMap[row.editColor]"></span>
+                            <span
+                                class="flex items-center gap-1.5 text-xs font-bold"
+                                :class="colorMap[row.editColor]"
+                            >
+                                <span
+                                    class="w-1.5 h-1.5 rounded-full shrink-0"
+                                    :class="dotMap[row.editColor]"
+                                />
                                 {{ row.edit }}
                             </span>
                         </td>
                         <td class="px-4 py-3.5">
-                            <span class="flex items-center gap-1.5 text-xs font-bold" :class="colorMap[row.deleteColor]">
-                                <span class="w-1.5 h-1.5 rounded-full shrink-0" :class="dotMap[row.deleteColor]"></span>
+                            <span
+                                class="flex items-center gap-1.5 text-xs font-bold"
+                                :class="colorMap[row.deleteColor]"
+                            >
+                                <span
+                                    class="w-1.5 h-1.5 rounded-full shrink-0"
+                                    :class="dotMap[row.deleteColor]"
+                                />
                                 {{ row.delete }}
                             </span>
                         </td>

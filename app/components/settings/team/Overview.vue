@@ -69,21 +69,30 @@
                 class="px-6 py-5"
             >
                 <div class="flex items-center gap-2 mb-3">
-                    <span class="w-2 h-2 rounded-full shrink-0" :class="card.dot"></span>
+                    <span
+                        class="w-2 h-2 rounded-full shrink-0"
+                        :class="card.dot"
+                    />
                     <span class="text-[11px] font-bold text-gray-500">{{ card.label }}</span>
                 </div>
                 <div class="flex items-baseline gap-1.5 mb-2">
                     <span class="text-3xl font-black text-gray-900">{{ card.value }}</span>
-                    <span v-if="card.total" class="text-sm text-gray-400 font-medium">/ {{ card.total }}</span>
+                    <span
+                        v-if="card.total"
+                        class="text-sm text-gray-400 font-medium"
+                    >/ {{ card.total }}</span>
                 </div>
                 <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
                     <div
                         class="h-1.5 rounded-full transition-all"
                         :class="card.bar"
                         :style="{ width: `${Math.min(card.pct, 100)}%` }"
-                    ></div>
+                    />
                 </div>
-                <p class="text-[11px] font-bold" :class="card.subColor">{{ card.sub }}</p>
+                <p
+                    class="text-[11px] font-bold"
+                    :class="card.subColor"
+                >{{ card.sub }}</p>
             </div>
         </div>
     </div>

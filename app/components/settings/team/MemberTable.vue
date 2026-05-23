@@ -32,7 +32,7 @@
     }
 
     const filteredMembers = computed(() => {
-        return props.members.filter(m => {
+        return props.members.filter((m) => {
             const matchRole = roleFilter.value === 'ทุก role' || m.role === roleFilter.value
             const q = searchQuery.value.toLowerCase()
             const matchSearch = !q || m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)
@@ -61,13 +61,16 @@
         <div class="flex items-center gap-3 px-6 py-3.5 border-b border-gray-50 flex-wrap">
             <!-- Search -->
             <div class="relative flex-1 min-w-48">
-                <UIcon name="i-lucide-search" class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                <UIcon
+                    name="i-lucide-search"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400"
+                />
                 <input
                     v-model="searchQuery"
                     type="text"
                     placeholder="ค้นหาสมาชิก, อีเมล, เลขใบประกอบฯ..."
                     class="w-full pl-8 pr-4 py-2 text-xs border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all font-medium"
-                />
+                >
             </div>
 
             <!-- Role filter pills -->
@@ -98,7 +101,10 @@
             </select>
 
             <button class="text-xs font-bold text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 bg-gray-50 hover:bg-gray-100 transition-colors flex items-center gap-1.5 cursor-pointer">
-                <UIcon name="i-lucide-columns-3" class="w-3.5 h-3.5" />
+                <UIcon
+                    name="i-lucide-columns-3"
+                    class="w-3.5 h-3.5"
+                />
                 คอลัมน์
             </button>
         </div>
@@ -144,7 +150,10 @@
 
                         <!-- Role badge -->
                         <td class="px-4 py-4">
-                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md" :class="roleBadgeStyle[member.role]">
+                            <span
+                                class="text-[10px] font-bold px-2.5 py-1 rounded-md"
+                                :class="roleBadgeStyle[member.role]"
+                            >
                                 {{ member.role }}
                             </span>
                         </td>
@@ -170,7 +179,10 @@
                         <!-- Status -->
                         <td class="px-4 py-4">
                             <div class="flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full" :class="statusDot[member.status]"></span>
+                                <span
+                                    class="w-2 h-2 rounded-full"
+                                    :class="statusDot[member.status]"
+                                />
                                 <span class="text-xs font-bold text-gray-600">{{ statusLabel[member.status] }}</span>
                             </div>
                         </td>
@@ -182,16 +194,25 @@
                                     class="w-7 h-7 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-colors"
                                     @click="toast.info('แก้ไขสมาชิก', `กำลังเปิดการแก้ไขข้อมูล ${member.name}`)"
                                 >
-                                    <UIcon name="i-lucide-pencil" class="w-3.5 h-3.5 text-gray-500" />
+                                    <UIcon
+                                        name="i-lucide-pencil"
+                                        class="w-3.5 h-3.5 text-gray-500"
+                                    />
                                 </button>
                                 <button
                                     class="w-7 h-7 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-colors"
                                     @click="toast.info('รีเซ็ตรหัสผ่าน', `ส่งลิงก์รีเซ็ตไปยัง ${member.email}`)"
                                 >
-                                    <UIcon name="i-lucide-lock" class="w-3.5 h-3.5 text-gray-500" />
+                                    <UIcon
+                                        name="i-lucide-lock"
+                                        class="w-3.5 h-3.5 text-gray-500"
+                                    />
                                 </button>
                                 <button class="w-7 h-7 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-colors">
-                                    <UIcon name="i-lucide-more-horizontal" class="w-3.5 h-3.5 text-gray-500" />
+                                    <UIcon
+                                        name="i-lucide-more-horizontal"
+                                        class="w-3.5 h-3.5 text-gray-500"
+                                    />
                                 </button>
                             </div>
                         </td>

@@ -57,7 +57,10 @@
                     <div class="min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="text-sm font-bold text-gray-800 truncate">{{ inv.email }}</span>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md" :class="roleBadgeColor[inv.role]">
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-md"
+                                :class="roleBadgeColor[inv.role]"
+                            >
                                 {{ inv.role }}
                             </span>
                         </div>

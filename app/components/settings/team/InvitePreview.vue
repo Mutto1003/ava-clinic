@@ -6,7 +6,7 @@
         recentActivity: ActivityItem[]
     }>()
 
-    const permissionSummary: Record<TeamRole, { can: string[]; partial: string[]; cannot: string[] }> = {
+    const permissionSummary: Record<TeamRole, { can: string[], partial: string[], cannot: string[] }> = {
         'หมอ': {
             can: ['เวชระเบียน · รูปก่อน-หลัง · นัดหมาย · Teleconsult · จดบันทึก SOAP · สั่งการรักษา'],
             partial: ['รายงานยอดขายของตัวเอง · ใบเสร็จเฉพาะเคสตนเอง · stock ที่ใช้ในเคส'],
@@ -32,7 +32,7 @@
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-gray-900 text-sm">คำเชิญที่จะถูกส่ง</h3>
                 <div class="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     LIVE
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     <span>{{ form.email || 'ยังไม่ได้กรอกอีเมล' }}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span></span>
+                    <span />
                     <span class="text-gray-400">{{ form.sendInviteEmail ? 'เมื่อกด บันทึก' : 'ปิดการส่งอีเมล' }}</span>
                 </div>
             </div>
@@ -67,7 +67,10 @@
                             กรอกข้อมูลเพื่อดูตัวอย่างคำเชิญ
                         </template>
                     </p>
-                    <p v-if="form.branches.length" class="text-[11px] text-gray-500 mt-1">
+                    <p
+                        v-if="form.branches.length"
+                        class="text-[11px] text-gray-500 mt-1"
+                    >
                         เข้าถึงสาขา: <span class="font-bold text-gray-700">{{ form.branches.join(', ') }}</span>
                     </p>
                 </div>
@@ -99,7 +102,10 @@
                 <!-- Can do -->
                 <div v-if="permissionSummary[form.role].can.length">
                     <div class="flex items-center gap-1.5 mb-1.5">
-                        <UIcon name="i-lucide-check-circle" class="w-3.5 h-3.5 text-emerald-500" />
+                        <UIcon
+                            name="i-lucide-check-circle"
+                            class="w-3.5 h-3.5 text-emerald-500"
+                        />
                         <span class="text-[11px] font-black text-gray-700">เห็น · ทำได้</span>
                     </div>
                     <p class="text-[10px] text-gray-500 font-medium leading-relaxed pl-5">
@@ -110,7 +116,10 @@
                 <!-- Partial -->
                 <div v-if="permissionSummary[form.role].partial.length">
                     <div class="flex items-center gap-1.5 mb-1.5">
-                        <UIcon name="i-lucide-circle-dot" class="w-3.5 h-3.5 text-amber-500" />
+                        <UIcon
+                            name="i-lucide-circle-dot"
+                            class="w-3.5 h-3.5 text-amber-500"
+                        />
                         <span class="text-[11px] font-black text-gray-700">เห็นบางส่วน</span>
                     </div>
                     <p class="text-[10px] text-gray-500 font-medium leading-relaxed pl-5">
@@ -121,7 +130,10 @@
                 <!-- Cannot -->
                 <div v-if="permissionSummary[form.role].cannot.length">
                     <div class="flex items-center gap-1.5 mb-1.5">
-                        <UIcon name="i-lucide-x-circle" class="w-3.5 h-3.5 text-red-400" />
+                        <UIcon
+                            name="i-lucide-x-circle"
+                            class="w-3.5 h-3.5 text-red-400"
+                        />
                         <span class="text-[11px] font-black text-gray-700">เห็นไม่ได้</span>
                     </div>
                     <p class="text-[10px] text-gray-500 font-medium leading-relaxed pl-5">
@@ -143,7 +155,10 @@
                     :key="item.id"
                     class="flex items-start gap-2.5"
                 >
-                    <div class="w-2 h-2 rounded-full mt-1.5 shrink-0" :class="item.color"></div>
+                    <div
+                        class="w-2 h-2 rounded-full mt-1.5 shrink-0"
+                        :class="item.color"
+                    />
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center justify-between gap-2">
                             <p class="text-[11px] font-bold text-gray-800 truncate">

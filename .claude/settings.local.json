@@ -7,7 +7,8 @@
       "Bash(gh repo *)",
       "Bash(git remote *)",
       "Bash(curl -s http://localhost:3000/api/teleconsult)",
-      "Bash(npx nuxi *)"
+      "Bash(npx nuxi *)",
+      "Bash(npx eslint *)"
     ]
   }
 }
