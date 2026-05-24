@@ -5,8 +5,8 @@
 
         <!-- Content -->
         <div class="announce-body">
-            <p class="announce-section">ข่าวสารพนักงาน</p>
-            <p class="announce-text">ประกาศปรับปรุงระบบ Teleconsult<br />ประจำเดือนพฤษภาคม 2567</p>
+            <p class="announce-section">🚩 ข่าวสารพนักงาน</p>
+            <p class="announce-text">ประกาศปรับปรุงระบบ Teleconsult<br />ประจำเดือนพฤษภาคม 2569</p>
             <button class="announce-btn" type="button">อ่านรายละเอียด</button>
         </div>
     </div>

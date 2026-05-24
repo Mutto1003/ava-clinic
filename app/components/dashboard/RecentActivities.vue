@@ -50,6 +50,15 @@
             prefix: 'เพิ่มลูกค้าใหม่',
             highlight: 'HN 6700883 · คุณวารี มีสุข',
             time: '3 ชม. ที่แล้ว'
+        },
+        {
+            id: 6,
+            icon: 'i-lucide-camera',
+            bgClass: 'bg-violet-50/80',
+            iconClass: 'text-violet-500',
+            prefix: 'อัปโหลดรูปก่อน-หลัง',
+            highlight: 'คุณลินิ แสงทอง · 4 รูป',
+            time: '4 ชม. ที่แล้ว'
         }
     ])
 
@@ -72,7 +81,7 @@
                 <div class="w-1.5 h-6 bg-indigo-600 rounded-full shadow-sm shadow-indigo-600/30"></div>
                 <div>
                     <h3 class="text-base md:text-lg font-black text-slate-800 tracking-tight leading-none">กิจกรรมล่าสุด</h3>
-                    <p class="text-[11px] font-bold text-gray-400 mt-1.5">5 รายการในช่วง 3 ชม.</p>
+                    <p class="text-[11px] font-bold text-gray-400 mt-1.5">6 รายการในช่วง 4 ชม.</p>
                 </div>
             </div>
             

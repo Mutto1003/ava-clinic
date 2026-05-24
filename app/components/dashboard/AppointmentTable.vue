@@ -1,147 +1,219 @@
 <script setup lang="ts">
-    import type { TableColumn } from '@nuxt/ui'
-    import { getAppointments, type Appointment } from '~/client/dashboard/appointments'
+    import { ref, computed } from 'vue'
+    import type { Appointment } from '~/client/dashboard/appointments'
     import { useAuthStore } from '~/stores/auth'
 
     const authStore = useAuthStore()
+    const activeFilter = ref('ทั้งหมด')
+    const filters = ['ทั้งหมด', 'รอดำเนินการ', 'เสร็จแล้ว']
 
-    const columns: TableColumn<Appointment>[] = [
-        { accessorKey: 'time', header: 'เวลา' },
-        { accessorKey: 'customer', header: 'ชื่อลูกค้า' },
-        { accessorKey: 'service', header: 'บริการ' },
-        { accessorKey: 'status', header: 'สถานะ' }
-    ]
+    const dateLabel = computed(() => {
+        const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']
+        const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+        const d = new Date()
+        return `วันนี้ · ${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`
+    })
 
-    const statusStyle: Record<string, { bg: string; color: string }> = {
-        สำเร็จ: { bg: '#dcfce7', color: '#16a34a' },
-        กำลังรับ: { bg: '#fef9c3', color: '#ca8a04' },
-        รอดำเนินการ: { bg: '#eff6ff', color: '#3b82f6' },
-        ยกเลิก: { bg: '#fee2e2', color: '#ef4444' }
+    const badgeClass: Record<string, string> = {
+        สำเร็จ: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+        กำลังรอ: 'bg-amber-50 text-amber-700 ring-amber-200',
+        Consult: 'bg-blue-50 text-blue-700 ring-blue-200',
+        นัดหมาย: 'bg-slate-50 text-slate-600 ring-slate-200',
+        ยกเลิก: 'bg-red-50 text-red-600 ring-red-200'
     }
 
-    const getToken = () => {
-        return authStore.token || ''
-    }
+    const { data: raw, status } = await useFetch<{ data: Appointment[] }>('/api/dashboard/appointments', {
+        headers: { Authorization: `Bearer ${authStore.token}` },
+        default: () => ({ data: [] as Appointment[] })
+    })
 
-    const { data: appointments, status } = await useAsyncData(
-        'dashboard-appointments',
-        async () => {
-            const resp = await getAppointments(getToken())
-            if (resp.status === 'success') {
-                return resp.data
-            }
-            return []
-        },
-        { default: () => [] as Appointment[] }
-    )
+    const appointments = computed(() => raw.value?.data ?? [])
+
+    const filtered = computed(() => {
+        if (!appointments.value.length) return []
+        if (activeFilter.value === 'รอดำเนินการ')
+            return appointments.value.filter(a => ['กำลังรอ', 'นัดหมาย', 'Consult'].includes(a.status))
+        if (activeFilter.value === 'เสร็จแล้ว')
+            return appointments.value.filter(a => a.status === 'สำเร็จ')
+        return appointments.value
+    })
 </script>
 
 <template>
-    <div class="appt-table" data-testid="appointment-table">
-        <!-- Header -->
-        <div class="table-header">
-            <div class="table-title-wrap">
-                <div class="title-bar" />
-                <h3 class="table-title">ตารางนัดหมายวันนี้</h3>
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" data-testid="appointment-table">
+        <!-- Card Header -->
+        <div class="flex items-center justify-between px-5 pt-5 pb-3">
+            <div class="flex items-center gap-2.5">
+                <div class="w-1 h-5 rounded-full" style="background: linear-gradient(180deg, #4f46e5, #7c3aed)" />
+                <h3 class="text-sm font-black text-slate-800">ตารางนัดหมายวันนี้</h3>
+                <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full ring-1 ring-indigo-100">
+                    {{ appointments?.length ?? 0 }} รายการ
+                </span>
             </div>
-            <button class="see-all-btn" type="button">ดูทั้งหมด</button>
+            <button class="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors" type="button">
+                ดูทั้งหมด
+                <UIcon name="i-lucide-arrow-right" class="w-3.5 h-3.5" />
+            </button>
+        </div>
+
+        <!-- Date navigation -->
+        <div class="flex items-center justify-between px-5 pb-3">
+            <button
+                class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:border-indigo-300 hover:text-indigo-600 transition-all"
+                type="button"
+            >
+                <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+            </button>
+            <span class="text-xs font-bold text-slate-600">{{ dateLabel }}</span>
+            <button
+                class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:border-indigo-300 hover:text-indigo-600 transition-all"
+                type="button"
+            >
+                <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+            </button>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="flex gap-1 px-5 pb-3">
+            <button
+                v-for="f in filters"
+                :key="f"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+                :class="activeFilter === f
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-500 hover:bg-slate-100'"
+                type="button"
+                @click="activeFilter = f"
+            >
+                {{ f }}
+            </button>
         </div>
 
         <!-- Loading -->
-        <div v-if="status === 'pending'" class="table-loading">
-            <div class="loading-spinner" />
+        <div v-if="status === 'pending'" class="flex justify-center py-10">
+            <div class="loading-spin" />
         </div>
 
         <!-- Table -->
-        <table v-else class="appt-tbl">
-            <thead>
-                <tr>
-                    <th v-for="col in columns" :key="col.header as string">
-                        {{ col.header }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in appointments" :key="row.time + row.customer">
-                    <td class="td-time">{{ row.time }}</td>
-                    <td>{{ row.customer }}</td>
-                    <td>{{ row.service }}</td>
-                    <td>
-                        <span
-                            class="status-badge"
-                            :style="{
-                                background: statusStyle[row.status]?.bg ?? '#f1f5f9',
-                                color: statusStyle[row.status]?.color ?? '#64748b'
-                            }"
-                        >
-                            {{ row.status }}
-                        </span>
-                    </td>
-                </tr>
-                <tr v-if="!appointments?.length">
-                    <td colspan="4" class="td-empty">ไม่มีข้อมูลนัดหมาย</td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-else class="overflow-x-auto">
+            <table class="w-full" style="border-collapse: collapse">
+                <thead>
+                    <tr style="background: #f8fafc; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9">
+                        <th class="th">เวลา</th>
+                        <th class="th">ลูกค้า</th>
+                        <th class="th">บริการ</th>
+                        <th class="th">แพทย์</th>
+                        <th class="th">สถานะ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="row in filtered"
+                        :key="row.id"
+                        class="hover:bg-indigo-50/30 transition-colors"
+                        style="border-bottom: 1px solid #f8fafc"
+                        :style="row.isUpcoming ? { boxShadow: 'inset 3px 0 0 #4f46e5' } : {}"
+                    >
+                        <!-- เวลา -->
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-sm font-black"
+                                    :class="row.isUpcoming ? 'text-indigo-600' : 'text-slate-800'"
+                                >{{ row.time }}</span>
+                                <span class="text-[10px] font-medium text-slate-400 mt-0.5">{{ row.timeNote }}</span>
+                            </div>
+                        </td>
+                        <!-- ลูกค้า -->
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-2.5">
+                                <div
+                                    class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[11px] font-black shrink-0"
+                                    :class="row.avatarColor"
+                                >{{ row.initials }}</div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                                        <span class="text-xs font-bold text-slate-800">{{ row.customer }}</span>
+                                        <span
+                                            v-if="row.isVip"
+                                            class="text-[9px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full ring-1 ring-amber-200"
+                                        >VIP</span>
+                                        <span
+                                            v-if="row.isNew"
+                                            class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full ring-1 ring-emerald-200"
+                                        >ใหม่</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 font-medium">{{ row.hn }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- บริการ -->
+                        <td class="px-5 py-3">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-bold text-slate-700">{{ row.service }}</span>
+                                <span class="text-[10px] text-slate-400 font-medium mt-0.5">{{ row.serviceDetail }}</span>
+                            </div>
+                        </td>
+                        <!-- แพทย์ -->
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            <span class="text-xs text-slate-600 font-medium">{{ row.doctor }}</span>
+                        </td>
+                        <!-- สถานะ + actions -->
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-1.5">
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 rounded-full ring-1"
+                                    :class="badgeClass[row.status] ?? 'bg-slate-50 text-slate-500 ring-slate-200'"
+                                >{{ row.status }}</span>
+                                <button
+                                    v-if="row.status === 'Consult'"
+                                    class="w-6 h-6 flex items-center justify-center rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+                                    type="button"
+                                    title="Consult"
+                                >
+                                    <UIcon name="i-lucide-check" class="w-3.5 h-3.5" />
+                                </button>
+                                <template v-else-if="row.isUpcoming">
+                                    <button
+                                        class="w-6 h-6 flex items-center justify-center rounded-md bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
+                                        type="button"
+                                        title="โทร"
+                                    >
+                                        <UIcon name="i-lucide-phone" class="w-3 h-3" />
+                                    </button>
+                                    <button
+                                        class="w-6 h-6 flex items-center justify-center rounded-md bg-slate-50 text-slate-500 hover:bg-slate-100 transition-colors"
+                                        type="button"
+                                        title="เพิ่มเติม"
+                                    >
+                                        <UIcon name="i-lucide-more-horizontal" class="w-3.5 h-3.5" />
+                                    </button>
+                                </template>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="!filtered.length">
+                        <td colspan="5" class="text-center text-slate-400 text-sm py-10">
+                            ไม่มีข้อมูลนัดหมาย
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <style scoped>
-    .appt-table {
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        border: 1px solid #f1f5f9;
-    }
-
-    /* Header */
-    .table-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 18px 22px 14px;
-        border-bottom: 1px solid #f1f5f9;
-    }
-    .table-title-wrap {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .title-bar {
-        width: 4px;
-        height: 20px;
-        background: linear-gradient(180deg, #4f46e5, #7c3aed);
-        border-radius: 4px;
-    }
-    .table-title {
-        font-size: 15px;
+    .th {
+        padding: 10px 20px;
+        text-align: left;
+        font-size: 10px;
         font-weight: 700;
-        color: #1e293b;
-        margin: 0;
+        color: #94a3b8;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
     }
-    .see-all-btn {
-        font-size: 13px;
-        font-weight: 600;
-        color: #4f46e5;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 4px 8px;
-        border-radius: 6px;
-        transition: background 0.15s;
-    }
-    .see-all-btn:hover {
-        background: #ede9fe;
-    }
-
-    /* Loading */
-    .table-loading {
-        display: flex;
-        justify-content: center;
-        padding: 40px;
-    }
-    .loading-spinner {
+    .loading-spin {
         width: 28px;
         height: 28px;
         border: 3px solid #e2e8f0;
@@ -150,57 +222,6 @@
         animation: spin 0.7s linear infinite;
     }
     @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* Table */
-    .appt-tbl {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .appt-tbl thead tr {
-        background: #f8fafc;
-    }
-    .appt-tbl th {
-        padding: 11px 22px;
-        text-align: left;
-        font-size: 12px;
-        font-weight: 600;
-        color: #94a3b8;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-    }
-    .appt-tbl tbody tr {
-        border-top: 1px solid #f8fafc;
-        transition: background 0.12s;
-    }
-    .appt-tbl tbody tr:hover {
-        background: #fafafe;
-    }
-    .appt-tbl td {
-        padding: 13px 22px;
-        font-size: 13.5px;
-        color: #374151;
-    }
-    .td-time {
-        font-weight: 700;
-        color: #1e293b;
-        white-space: nowrap;
-    }
-    .td-empty {
-        text-align: center;
-        color: #94a3b8;
-        padding: 32px;
-    }
-
-    /* Status badge */
-    .status-badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
+        to { transform: rotate(360deg); }
     }
 </style>
