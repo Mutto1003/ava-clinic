@@ -9,7 +9,8 @@
       "Bash(curl -s http://localhost:3000/api/teleconsult)",
       "Bash(npx nuxi *)",
       "Bash(npx eslint *)",
-      "Bash(rm -rf /private/tmp/claude-501 && df -h /)"
+      "Bash(rm -rf /private/tmp/claude-501 && df -h /)",
+      "Bash(curl -s http://localhost:3000/api/branches)"
     ],
     "additionalDirectories": [
       "/private/tmp/claude-501"

@@ -17,6 +17,7 @@
         '/customerInfo': { parent: 'เมนูหลัก', child: 'ข้อมูลลูกค้า', icon: 'i-lucide-users' },
         '/reports': { parent: 'เมนูหลัก', child: 'รายงาน', icon: 'i-lucide-bar-chart-2' },
         '/teleconsult': { parent: 'เมนูหลัก', child: 'Teleconsult', icon: 'i-lucide-video' },
+        '/branches': { parent: 'จุดบริการ', child: 'สาขาเลย', icon: 'i-lucide-map-pin' },
         '/settings': { parent: 'ระบบ', child: 'ตั้งค่า', icon: 'i-lucide-settings' },
         '/search': { parent: 'ระบบ', child: 'ค้นหา', icon: 'i-lucide-search' }
     }
