@@ -12,7 +12,13 @@
     import BusinessHours from '~/components/settings/clinic/BusinessHours.vue'
     import Services from '~/components/settings/clinic/Services.vue'
     import ClinicLivePreview from '~/components/settings/clinic/ClinicLivePreview.vue'
-    import type { TeamData, MemberFormData, ClinicData } from '~/client/settings'
+    import UsagePlan from '~/components/settings/billing/UsagePlan.vue'
+    import CurrentUsage from '~/components/settings/billing/CurrentUsage.vue'
+    import PaymentChannels from '~/components/settings/billing/PaymentChannels.vue'
+    import ReceiptFormat from '~/components/settings/billing/ReceiptFormat.vue'
+    import BillingHistory from '~/components/settings/billing/BillingHistory.vue'
+    import BillingSidebar from '~/components/settings/billing/BillingSidebar.vue'
+    import type { TeamData, MemberFormData, ClinicData, BillingData } from '~/client/settings'
 
     definePageMeta({
         layout: 'main',
@@ -93,6 +99,32 @@
 
     onUnmounted(() => stopAutoSaveTimer())
 
+    // ── Billing ──────────────────────────────────────────────────────────────
+    const { data: billingRaw, pending: billingPending } = useFetch<{ status: string; data: BillingData }>('/api/settings/billing')
+    const billingForm = ref<BillingData | null>(null)
+    const billingSaving = ref(false)
+
+    watch(billingRaw, (val) => {
+        if (val?.data) billingForm.value = JSON.parse(JSON.stringify(val.data))
+    }, { immediate: true })
+
+    async function handleBillingSave() {
+        if (!billingForm.value) return
+        billingSaving.value = true
+        await $fetch('/api/settings/billing', { method: 'PUT', body: billingForm.value })
+        billingSaving.value = false
+        toast.success('บันทึกสำเร็จ', 'ตั้งค่าการชำระเงินถูกบันทึกเรียบร้อยแล้ว', { icon: 'i-lucide-check-circle' })
+    }
+
+    function handleChangePlan(plan: BillingData['currentPlan']) {
+        if (!billingForm.value) return
+        toast.info('เปลี่ยนแผน', `กำลังดำเนินการเปลี่ยนไปยังแผน ${plan}`, { icon: 'i-lucide-refresh-cw' })
+    }
+
+    function handleExportBillingCsv() {
+        toast.info('Export CSV', 'กำลังสร้างไฟล์ประวัติการชำระเงิน...', { icon: 'i-lucide-download' })
+    }
+
     const tabs = [
         { key: 'general', label: 'ทั่วไป' },
         { key: 'team', label: 'ทีมงาน & สิทธิ์', badge: '34' },
@@ -104,6 +136,11 @@
     ]
     const activeTab = ref('clinic')
     const showAddMember = ref(false)
+
+    function switchTab(key: string) {
+        activeTab.value = key
+        if (import.meta.client) window.scrollTo(0, 0)
+    }
 
     const form = ref<MemberFormData>({
         title: 'นพ.',
@@ -194,7 +231,10 @@
                     breadcrumb: 'การชำระเงิน',
                     title: 'ตั้งค่าระบบ — การชำระเงิน',
                     description: 'จัดการแผนการใช้งาน · ช่องทางชำระเงิน · ใบเสร็จ และ invoice ของคลินิก',
-                    actions: []
+                    actions: [
+                        { label: 'โหลดใบเสร็จย้อนหลัง', icon: 'i-lucide-download', style: 'outline', onClick: handleExportBillingCsv },
+                        { label: 'บันทึก', icon: 'i-lucide-save', style: 'solid', onClick: handleBillingSave }
+                    ]
                 }
             case 'notifications':
                 return {
@@ -234,6 +274,7 @@
 </script>
 
 <template>
+    <ClientOnly>
     <div class="max-w-[1400px] mx-auto px-4 py-6 pb-28 space-y-0">
         <!-- Loading overlay -->
         <div v-if="pending" class="flex items-center justify-center min-h-[60vh]">
@@ -295,7 +336,7 @@
                                 :class="activeTab === tab.key
                                     ? 'text-indigo-600 border-indigo-600'
                                     : 'text-gray-500 border-transparent hover:text-gray-700'"
-                                @click="activeTab = tab.key"
+                                @click="switchTab(tab.key)"
                             >
                                 {{ tab.label }}
                                 <span
@@ -374,6 +415,48 @@
                         </template>
                     </div>
 
+                    <!-- ── Billing tab content ── -->
+                    <div
+                        v-else-if="activeTab === 'billing'"
+                        class="space-y-5"
+                    >
+                        <div
+                            v-if="billingPending || !billingForm"
+                            class="flex items-center justify-center min-h-[40vh]"
+                        >
+                            <UIcon name="i-heroicons-arrow-path" class="w-7 h-7 text-indigo-600 animate-spin" />
+                        </div>
+                        <template v-else>
+                            <UsagePlan
+                                :plans="billingForm.plans"
+                                :current-plan="billingForm.currentPlan"
+                                :billing-cycle="billingForm.billingCycle"
+                                @update:billing-cycle="billingForm.billingCycle = $event"
+                                @change-plan="handleChangePlan"
+                            />
+                            <CurrentUsage
+                                :usage="billingForm.usage"
+                                data-as-of="24 พ.ค. 2026"
+                                :next-billing-date="billingForm.nextBillingDate"
+                            />
+                            <PaymentChannels
+                                :channels="billingForm.paymentChannels"
+                                @update:channels="billingForm.paymentChannels = $event"
+                            />
+                            <ReceiptFormat
+                                v-model="billingForm.receiptFormat"
+                                clinic-name="AVACLINIC"
+                                clinic-legal-name="บริษัท เอวา คลินิก จำกัด"
+                                clinic-tax-id="0105563984721"
+                                clinic-address="123 ถนนพระราม 9 แขวงบางกะปิ เขตห้วยขวาง กรุงเทพ 10310"
+                            />
+                            <BillingHistory
+                                :invoices="billingForm.invoices"
+                                @export-csv="handleExportBillingCsv"
+                            />
+                        </template>
+                    </div>
+
                     <!-- Other tabs: placeholder -->
                     <div
                         v-else
@@ -387,8 +470,20 @@
 
                 <!-- Right column: Sticky preview panel -->
                 <div class="w-72 shrink-0 sticky top-6 pb-6">
+                    <BillingSidebar
+                        v-if="activeTab === 'billing' && billingForm"
+                        :next-billing-amount="billingForm.nextBillingAmount"
+                        :next-billing-date="billingForm.nextBillingDate"
+                        :stored-payment-methods="billingForm.storedPaymentMethods"
+                        :account-credit="billingForm.accountCredit"
+                        :current-charges="billingForm.currentCharges"
+                        :billing-cycle="billingForm.billingCycle"
+                        @defer-cycle="toast.info('เลื่อนรอบ', 'ฟีเจอร์นี้อยู่ระหว่างพัฒนา', { icon: 'i-lucide-calendar' })"
+                        @edit-payment="toast.info('แก้ไขวิธีชำระ', 'ฟีเจอร์นี้อยู่ระหว่างพัฒนา', { icon: 'i-lucide-pencil' })"
+                        @add-payment-method="toast.info('เพิ่มวิธีชำระ', 'ฟีเจอร์นี้อยู่ระหว่างพัฒนา', { icon: 'i-lucide-plus' })"
+                    />
                     <ClinicLivePreview
-                        v-if="activeTab === 'clinic' && clinicForm"
+                        v-else-if="activeTab === 'clinic' && clinicForm"
                         :clinic="clinicForm"
                     />
                     <InvitePreview
@@ -452,6 +547,44 @@
         </div>
     </Transition>
 
+    <!-- ── Billing Bottom Action Bar ── -->
+    <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 translate-y-4"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-to-class="opacity-0 translate-y-4"
+    >
+        <div
+            v-if="activeTab === 'billing' && billingForm"
+            class="fixed bottom-0 left-[255px] right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-100 shadow-lg px-6 py-3 flex items-center justify-between"
+        >
+            <p class="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                <UIcon name="i-lucide-shield-check" class="w-3.5 h-3.5 text-emerald-500" />
+                ข้อมูลการชำระเงินทั้งหมดเข้ารหัสมาตรฐาน PCI-DSS · บันทึกอัตโนมัติ
+            </p>
+            <div class="flex items-center gap-2">
+                <button
+                    class="px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors"
+                    @click="handleExportBillingCsv"
+                >
+                    ดาวน์โหลดสำเนาทั้งหมด
+                </button>
+                <button
+                    class="px-5 py-2 text-sm font-black text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl cursor-pointer transition-colors shadow-md shadow-indigo-200 flex items-center gap-2 disabled:opacity-60"
+                    :disabled="billingSaving"
+                    @click="handleBillingSave"
+                >
+                    <UIcon
+                        :name="billingSaving ? 'i-heroicons-arrow-path' : 'i-lucide-check'"
+                        class="w-3.5 h-3.5"
+                        :class="billingSaving ? 'animate-spin' : ''"
+                    />
+                    บันทึกการเปลี่ยนแปลง
+                </button>
+            </div>
+        </div>
+    </Transition>
+
     <!-- ── Bottom Action Bar (fixed, shown when form is open) ── -->
     <Transition
         enter-active-class="transition-all duration-300 ease-out"
@@ -500,6 +633,12 @@
             </div>
         </div>
     </Transition>
+    <template #fallback>
+        <div class="flex items-center justify-center min-h-[60vh]">
+            <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-indigo-600 animate-spin" />
+        </div>
+    </template>
+    </ClientOnly>
 </template>
 
 <style scoped>
