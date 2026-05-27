@@ -2,7 +2,7 @@
 defineProps<{
     form: any
     isEditMode: boolean
-    computedAge: number | string
+    computedAge: number | string | null
     isIdCardValid: boolean
 }>()
 

@@ -8,6 +8,9 @@ const emit = defineEmits<{
     edit: []
     back: []
 }>()
+
+const route = useRoute()
+const customerId = computed(() => route.params.id)
 </script>
 
 <template>
@@ -29,6 +32,14 @@ const emit = defineEmits<{
                 </div>
             </div>
             <div class="flex items-center gap-3">
+                <NuxtLink
+                    v-if="!isEditMode"
+                    :to="`/customerInfo/${customerId}/treatment`"
+                    class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-2xl flex items-center gap-2 shadow-lg transition-all cursor-pointer transform hover:-translate-y-0.5"
+                >
+                    <UIcon name="i-lucide-clipboard-list" class="w-4 h-4 text-indigo-300" />
+                    <span>ประวัติการรักษา</span>
+                </NuxtLink>
                 <button
                     v-if="!isEditMode"
                     type="button"

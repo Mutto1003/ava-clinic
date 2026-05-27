@@ -2,10 +2,12 @@
 defineProps<{
     form: any
     avatarInitials: string
-    computedAge: number | string
+    computedAge: number | string | null
 }>()
 
 const toast = useAppToast()
+const route = useRoute()
+const customerId = computed(() => route.params.id)
 </script>
 
 <template>
@@ -59,6 +61,13 @@ const toast = useAppToast()
         <!-- Quick Actions -->
         <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-xl shadow-slate-200/40 space-y-3">
             <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">ทางลัดบริการ (Quick Actions)</h4>
+            <NuxtLink
+                :to="`/customerInfo/${customerId}/treatment`"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm py-3 px-4 rounded-2xl flex items-center justify-between transition-all cursor-pointer shadow-md shadow-indigo-200"
+            >
+                <span class="flex items-center gap-2"><UIcon name="i-lucide-clipboard-list" class="w-4 h-4" /><span>ดูประวัติการรักษา</span></span>
+                <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+            </NuxtLink>
             <button
                 type="button"
                 class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs md:text-sm py-3 px-4 rounded-2xl flex items-center justify-between transition-all cursor-pointer"

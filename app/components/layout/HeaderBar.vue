@@ -22,25 +22,25 @@
         '/search': { parent: 'ระบบ', child: 'ค้นหา', icon: 'i-lucide-search' }
     }
 
+    const subRouteMap: Record<string, MenuInfo> = {
+        '/treatment': { parent: 'ข้อมูลลูกค้า', child: 'ประวัติการรักษา', icon: 'i-lucide-clipboard-list' },
+    }
+
     const currentMenu = computed((): MenuInfo => {
+        // Check specific sub-routes first (e.g. /customerInfo/:id/treatment)
+        const subMatch = Object.keys(subRouteMap).find(suffix => route.path.endsWith(suffix))
+        if (subMatch) return subRouteMap[subMatch]!
+
         // If exact match is found
         const exactMatch = routeMap[route.path]
-        if (exactMatch) {
-            return exactMatch
-        }
-        
-        // Fallback: search for partial matches (e.g., /customerInfo/123)
-        const matchedKey = Object.keys(routeMap).find(key => 
-            key !== '/' && route.path.startsWith(key)
-        )
-        if (matchedKey) {
-            const partialMatch = routeMap[matchedKey]
-            if (partialMatch) {
-                return partialMatch
-            }
-        }
-        
-        // Default fallback
+        if (exactMatch) return exactMatch
+
+        // Fallback: search for partial matches sorted by specificity (e.g., /customerInfo/123)
+        const matchedKey = Object.keys(routeMap)
+            .filter(key => key !== '/' && route.path.startsWith(key))
+            .sort((a, b) => b.length - a.length)[0]
+        if (matchedKey) return routeMap[matchedKey]!
+
         return { parent: 'เมนูหลัก', child: 'หน้าแรก', icon: 'i-lucide-home' }
     })
 </script>
