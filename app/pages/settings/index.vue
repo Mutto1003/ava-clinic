@@ -275,7 +275,7 @@
 
 <template>
     <ClientOnly>
-    <div class="max-w-[1400px] mx-auto px-4 py-6 pb-28 space-y-0">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-6 pb-28 space-y-0">
         <!-- Loading overlay -->
         <div v-if="pending" class="flex items-center justify-center min-h-[60vh]">
             <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-indigo-600 animate-spin" />

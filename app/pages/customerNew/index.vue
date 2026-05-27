@@ -69,7 +69,7 @@ const saveCustomer = async () => {
 </script>
 
 <template>
-    <div class="p-4 md:p-8 max-w-7xl mx-auto min-h-screen bg-slate-50/50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-8">
         <CustomerNewPageHeader
             @scan="simulateIdScan"
             @cancel="navigateTo('/dashboard')"

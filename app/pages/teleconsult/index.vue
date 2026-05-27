@@ -17,7 +17,7 @@
 </script>
 
 <template>
-    <div class="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-8">
         <div class="relative min-h-[80vh]">
             <div
                 v-if="pending"

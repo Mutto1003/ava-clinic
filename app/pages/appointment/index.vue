@@ -46,7 +46,7 @@
 </script>
 
 <template>
-    <div class="space-y-6 max-w-7xl mx-auto px-4 py-6 pb-28">
+    <div class="space-y-6 max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-28">
         <!-- Main Top Filter and Header Bar -->
         <FilterHeader
             v-model:selectedBranch="selectedBranch"

@@ -6,53 +6,17 @@
 </script>
 
 <template>
-    <div class="dash-page">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-8 flex flex-col gap-5">
         <!-- Clinic Header Banner -->
         <DashboardClinicHeader />
 
         <!-- Main two-column layout -->
-        <div class="main-grid">
-            <!-- Left: Appointment Table -->
-            <div class="table-col">
-                <DashboardAppointmentTable />
-            </div>
-
-            <!-- Right: Announcement + Activities -->
-            <div class="right-col">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-5 items-start">
+            <DashboardAppointmentTable />
+            <div class="flex flex-col gap-4">
                 <DashboardAnnouncementCard />
                 <DashboardRecentActivities />
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-    .dash-page {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 4px 32px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    .main-grid {
-        display: grid;
-        grid-template-columns: 1fr 340px;
-        gap: 20px;
-        align-items: start;
-    }
-    .table-col {
-        min-width: 0;
-    }
-    .right-col {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    @media (max-width: 1024px) {
-        .main-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>

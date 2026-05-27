@@ -127,7 +127,7 @@
 </script>
 
 <template>
-    <div class="pb-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-8">
         <!-- Loading overlay -->
         <div
             v-if="pending"
