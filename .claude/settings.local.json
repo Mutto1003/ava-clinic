@@ -10,7 +10,10 @@
       "Bash(npx nuxi *)",
       "Bash(npx eslint *)",
       "Bash(rm -rf /private/tmp/claude-501 && df -h /)",
-      "Bash(curl -s http://localhost:3000/api/branches)"
+      "Bash(curl -s http://localhost:3000/api/branches)",
+      "Bash(lsof -ti:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/)"
     ],
     "additionalDirectories": [
       "/private/tmp/claude-501"
